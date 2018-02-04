@@ -31,6 +31,8 @@ public class Enemy {
 				return new Bokbo();
 			case "Ghost":
 				return new Ghost();
+			case "Sphynx":
+				return new Sphynx();
 			default:
 				return null;
 		}
@@ -109,5 +111,11 @@ class Ghost extends Enemy{
 	@Override
 	public boolean moves(){
 		return (Math.random() < 0.2);
+	}
+}
+class Sphynx extends Enemy{
+	public Sphynx(){
+		super("Sphynx");
+		setStats(15, 1, 50);
 	}
 }
