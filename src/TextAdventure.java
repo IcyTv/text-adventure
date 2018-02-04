@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class TextAdventure{
 	List<Room> rooms;
@@ -47,8 +48,23 @@ public class TextAdventure{
 	
 	public boolean draw(){
 		if(current.pos()[0] == sx - 1 && current.pos()[1] == sy -1) {
+			Scanner inp = new Scanner(System.in);
+			while(true){
+				System.out.println("There is a Sphynx guarding the exit of the maze.\n\"Who makes it, has no need of it.\nWho buys it, has no use for it. \nWho uses it can neither see nor feel it. \nWhat is it?\"");
+				if(inp.nextLine().toUpperCase().indexOf("COFFIN") >= 0){
+					System.out.println("\"Correct! How did you guess that?\nI bet you cheated!\nThat is why you will feel my wrath!\"");
+					current.spawnEnemy("Sphynx");
+					break;
+				} else {
+					System.out.println("That is not correct!");
+				}
+			}
 			System.out.println("Congratulations traveler! You made it to the end in only " + time + " hours");
-			return true;
+			if(current.getEnemy() != null){
+				return false;
+			} else {
+				return true;
+			}
 		}
 		
 		if(strength > maxStr){
