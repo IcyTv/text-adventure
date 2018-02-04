@@ -44,6 +44,7 @@ public class TextAdventureRunner
 		    		no1 = true;
 	    	} else if(ans.toUpperCase().startsWith("NO") && no1) {
 	    		System.out.println("Farewell then... and have safe travels back to your home!");
+	    		inp.close();
 	    		return;
 	    	} else if(ans.toUpperCase().startsWith("YES")) {
 	    		System.out.println("Very well! I will be accompanying you.\nIf you want to know anything, just ask for HELP!\nI will also explain the environment to you and tell you where you can go, to help you on your journey.\n");
@@ -71,14 +72,12 @@ public class TextAdventureRunner
         	redraw = true;
         	String tmp = inp.nextLine();
         	if(!text.isAttacking()){
-	        	if(tmp.toUpperCase().startsWith("GO") || tmp.toUpperCase().startsWith("UNLOCK")){
-	            	if(text.getStr() > 0){
-	            		text.move(tmp);	
-	            	} else {
-	            		redraw = false;
-	            		System.out.println("You are not strong enough to walk! You need to rest!");
-	            	}
-	        	} else if (tmp.toUpperCase().startsWith("BREAK")) {
+	        	if(tmp.toUpperCase().startsWith("GO")){
+	            	text.move(tmp);	
+	        	} else if(tmp.toUpperCase().startsWith("UNLOCK")) {
+	        		text.unlock(tmp);
+	        	}
+	        	else if (tmp.toUpperCase().startsWith("BREAK")) {
 	        		text.breakWall(tmp);
 	        		redraw = false;
 	        	} else if(tmp.toUpperCase().startsWith("TAKE")) {
@@ -124,12 +123,12 @@ public class TextAdventureRunner
         	} else {
         		if(tmp.toUpperCase().startsWith("ATTACK")) {
         			if(text.attack()){
-        				return;
+        				break;
         			}
         			redraw = false;
         		} else if(tmp.toUpperCase().startsWith("FLEE")){
         			if(text.flee()){
-        				return;
+        				break;
         			}
         			redraw = false;
         		} else if(tmp.toUpperCase().startsWith("HELP")){

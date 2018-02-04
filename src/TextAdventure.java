@@ -257,105 +257,142 @@ public class TextAdventure{
 		last = current;
 		lastDir = dir;
 		time++;
-		if(dir.toUpperCase().startsWith("GO ")) {
-			switch(dir.toUpperCase().replace("GO ", "")) {
+		switch(dir.toUpperCase().replace("GO ", "")) {
+			case "NORTH":
+				if(current.doorLocked(0)) {
+					System.out.println("This door is locked, you need a key to unlock it");
+				}
+				else if(current.pos()[1] > 0 && current.getDoor(0)){
+					current = rooms.get((current.pos()[1] - 1) * sx + current.pos()[0]);
+					current.remWall(2, true);
+				}
+				break;
+			case "EAST":
+				if(current.doorLocked(1)) {
+					System.out.println("This door is locked, you need a key to unlock it");
+				}
+				else if(current.pos()[0] < sx && current.getDoor(1)){
+					current = rooms.get(current.pos()[1] * sx + current.pos()[0] + 1);
+					current.remWall(3, true);
+				}
+				break;
+			case "SOUTH":
+				if(current.doorLocked(2)) {
+					System.out.println("This door is locked, you need a key to unlock it");
+				}
+				else if(current.pos()[1] < sy && current.getDoor(2)){
+					current = rooms.get((current.pos()[1] + 1) * sx + current.pos()[0]);
+					current.remWall(0, true);
+				}
+				break;
+			case "WEST":
+				if(current.doorLocked(3)) {
+					System.out.println("This door is locked, you need a key to unlock it");
+				}
+				else if(current.pos()[0] > 0 && current.getDoor(3)){
+					current = rooms.get((current.pos()[1]) * sx + current.pos()[0] -1);
+					current.remWall(1, true);
+				}
+				break;
+			default:
+				System.out.println("This is not a direction!");
+		}
+		
+		if(current.pos()[0] == sx-1 && current.pos()[1] == sy-1){
+			return;
+		}
+		
+		ArrayList<Integer> tmp = new ArrayList<Integer>();
+		if(!current.locked()) {
+			for(int i = 0; i < 4; i++) {
+				tmp.add(i);
+			}
+			if(current.pos()[1] == 0) {
+				tmp.remove(tmp.indexOf(0));
+			}
+			if(current.pos()[0] >= sx-1) {
+				tmp.remove(tmp.indexOf(1));
+			}
+			if(current.pos()[1] >= sy-1) {
+				tmp.remove(tmp.indexOf(2));
+			}
+			if(current.pos()[0] == 0) {
+				tmp.remove(tmp.indexOf(3));
+			}
+			Collections.shuffle(tmp);
+		}
+		for(int i = 0; i < new Random().nextInt(3) + 1; i++) {
+			if(!current.locked()){
+				int r = tmp.get(i);
+				current.remWall(r);
+				if(Math.random() < 0.03) {
+					current.lockDoor(r);
+				}
+			}
+		}
+		current.lock();	
+	}
+	
+	public void unlock(String dir) {
+		dir = dir.toUpperCase().replace("UNLOCK ", "");
+		if(keys > 0) {
+			switch(dir) {
 				case "NORTH":
 					if(current.doorLocked(0)) {
-						System.out.println("This door is locked, you need a key to unlock it");
+						keys--;
+						current.unlockDoor(0);
+						break;
+					} else {
+						System.out.println("This door is not locked!");
+						break;
 					}
-					else if(current.pos()[1] > 0 && current.getDoor(0)){
-						current = rooms.get((current.pos()[1] - 1) * sx + current.pos()[0]);
-						current.remWall(2, true);
-					}
-					break;
 				case "EAST":
 					if(current.doorLocked(1)) {
-						System.out.println("This door is locked, you need a key to unlock it");
+						keys--;
+						current.unlockDoor(1);
+						break;
+					} else {
+						System.out.println("This door is not locked!");
+						break;
 					}
-					else if(current.pos()[0] < sx && current.getDoor(1)){
-						current = rooms.get(current.pos()[1] * sx + current.pos()[0] + 1);
-						current.remWall(3, true);
-					}
-					break;
 				case "SOUTH":
 					if(current.doorLocked(2)) {
-						System.out.println("This door is locked, you need a key to unlock it");
+						keys--;
+						current.unlockDoor(2);
+						break;
+					} else {
+						System.out.println("This door is not locked!");
+						break;
 					}
-					else if(current.pos()[1] < sy && current.getDoor(2)){
-						current = rooms.get((current.pos()[1] + 1) * sx + current.pos()[0]);
-						current.remWall(0, true);
-					}
-					break;
 				case "WEST":
 					if(current.doorLocked(3)) {
-						System.out.println("This door is locked, you need a key to unlock it");
+						keys--;
+						current.unlockDoor(3);
+						break;
+					} else {
+						System.out.println("This door is not locked!");
+						break;
 					}
-					else if(current.pos()[0] > 0 && current.getDoor(3)){
-						current = rooms.get((current.pos()[1]) * sx + current.pos()[0] -1);
-						current.remWall(1, true);
+				case "":
+					boolean doorExists = false;
+					for(int i = 0; i > 4; i++) {
+						if(current.doorLocked(i)) {
+							keys--;
+							current.unlockDoor(i);
+							doorExists = true;
+							break;
+						}
+					}
+					if(!doorExists) {
+						System.out.println("There is no locked door!");
 					}
 					break;
 				default:
-					System.out.println("This is not a direction!");
-			}
-			
-			if(current.pos()[0] == sx-1 && current.pos()[1] == sy-1){
-				return;
-			}
-			
-			ArrayList<Integer> tmp = new ArrayList<Integer>();
-			if(!current.locked()) {
-				for(int i = 0; i < 4; i++) {
-					tmp.add(i);
-				}
-				if(current.pos()[1] == 0) {
-					tmp.remove(tmp.indexOf(0));
-				}
-				if(current.pos()[0] >= sx-1) {
-					tmp.remove(tmp.indexOf(1));
-				}
-				if(current.pos()[1] >= sy-1) {
-					tmp.remove(tmp.indexOf(2));
-				}
-				if(current.pos()[0] == 0) {
-					tmp.remove(tmp.indexOf(3));
-				}
-				Collections.shuffle(tmp);
-			}
-			for(int i = 0; i < new Random().nextInt(3) + 1; i++) {
-				if(!current.locked()){
-					int r = tmp.get(i);
-					current.remWall(r);
-					if(Math.random() < 0.03) {
-						current.lockDoor(r);
-					}
-				}
-			}
-			current.lock();
-		} else if(dir.toUpperCase().startsWith("UNLOCK") && keys > 0) {
-			switch(dir.toUpperCase().replace("UNLOCK ", "")) {
-				case "NORTH":
-					keys--;
-					current.unlockDoor(0);
-					move("GO NORTH");
+					System.out.println("Not a valid direction!");
 					break;
-				case "EAST":
-					keys--;
-					current.unlockDoor(1);
-					move("GO EAST");
-					break;
-				case "SOUTH":
-					keys--;
-					current.unlockDoor(2);
-					move("GO SOUTH");
-					break;
-				case "WEST":
-					keys--;
-					current.unlockDoor(3);
-					move("GO WEST");
-					break;
-			
 			}
+		} else {
+			System.out.println("You don't have a key!");
 		}
 	}
 	
