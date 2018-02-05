@@ -46,6 +46,7 @@ public class TextAdventure{
 		last = null;
 	}
 	
+	@SuppressWarnings("resource")
 	public boolean draw(){
 		if(current.pos()[0] == sx - 1 && current.pos()[1] == sy -1) {
 			Scanner inp = new Scanner(System.in);
@@ -63,6 +64,7 @@ public class TextAdventure{
 			if(current.getEnemy() != null){
 				return false;
 			} else {
+				inp.close();
 				return true;
 			}
 		}
@@ -97,7 +99,7 @@ public class TextAdventure{
 			enemy.draw();
 			if(strength < 10){
 				System.out.println("You doged the attack, but you are not very strong!\nWe should flee!");
-			} else if( Math.random() < 0.18) {
+			} else if( Math.random() < 0.4) {
 				System.out.println("You doged the attack! I admire your reflexes!");
 			} else {
 			
@@ -197,11 +199,16 @@ public class TextAdventure{
 	}
 	public boolean attack(){
 		if(!enemy.moves()) {
-			int dmg = enemy.defend(strength + new Random().nextInt(10) - 5);
-			if(dmg < 0){
-				System.out.println("The " + enemy.getType() + " took 0 damage");
+			if(Math.random() < 0.1){
+				System.out.println("The " + enemy.getType() + " doged your attack");
 			} else {
-				System.out.println("The " + enemy.getType() + " took " + dmg + " damage!");
+				int dmg = enemy.defend(strength + new Random().nextInt(10) - 5);
+
+				if(dmg < 0){
+					System.out.println("The " + enemy.getType() + " took 0 damage");
+				} else {
+					System.out.println("The " + enemy.getType() + " took " + dmg + " damage!");
+				}
 			}
 			if(enemy.isDead()){
 				System.out.println("The " + enemy.getType() + " died!");
@@ -211,6 +218,10 @@ public class TextAdventure{
 				attacking = false;
 				current.mvEnemy();
 				draw();
+				return false;
+			}
+			if(Math.random() < 0.1){
+				System.out.println("You doged the attack!");
 				return false;
 			}
 			int pow = -(int) (((strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength))) * 0.4) - enemy.attack() * 0.6);
