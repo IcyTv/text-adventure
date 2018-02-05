@@ -494,7 +494,7 @@ public class TextAdventure{
 	
 	public boolean rest() {
 		restNoAtt++;
-		if(strength >= 10 && (Math.random() < 0.1 * (restNoAtt * restNum) || block)){
+		if((strength >= 10 && (Math.random() < 0.1 * (restNoAtt * restNum))) || block) {
 			current.spawnEnemy("Ghost");
 			restNoAtt = 0;
 			restNum++;

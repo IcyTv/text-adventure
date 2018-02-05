@@ -17,14 +17,14 @@ public class TextAdventureRunner
 		
 		System.out.println("What is your name?");
 		String name = inp.nextLine();
-		if(name.toUpperCase().equals("STEPHEN")) {
+		if(name.toUpperCase().startsWith("STEPHEN")) {
 			System.out.println("I have been waiting for you!");
 			text.block();
 		} else if(name.toUpperCase().equals("MICHAEL")) {
 			System.out.println("Welcome admin!");
 			admin = true;
-			text.block();
-		} else if (name.toUpperCase().equals("JOSEPH")) {
+			//text.block();
+		} else if (name.toUpperCase().startsWith("JOSEPH")) {
 			System.out.println("Easymode enabled!");
 		} else {
 			System.out.println("Hello " + name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
