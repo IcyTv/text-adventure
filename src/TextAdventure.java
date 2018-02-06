@@ -25,10 +25,12 @@ public class TextAdventure{
 	private Enemy enemy;
 	private int restNoAtt;
 	private int restNum;
-	public boolean block;
+	private boolean block;
+	private double difficulty;
 	
 	public TextAdventure(){
 		block = false;
+		difficulty = 1;
 		attacking = false;
 		keys = 0;
 		strength = 30;
@@ -44,6 +46,31 @@ public class TextAdventure{
 		current.lock();
 		current.mvEnemy();
 		last = null;
+	}
+	
+	public void setDifficulty(String diff){
+		switch(diff.toUpperCase()){
+			case "EASY":
+				System.out.println("Difficulty has been changed to EASY");
+				difficulty = 0.5;
+				break;
+			case "MEDIUM":
+				System.out.println("Difficulty has been changed to MEDIUM");
+				difficulty = 0.75;
+				break;
+			case "HARD":
+				System.out.println("Difficulty has been changed to HARD");
+				difficulty = 0.9;
+				break;
+			case "IMPOSSIBLE":
+				System.out.println("Difficulty has been changed to IMPOSSIBLE");
+				difficulty = 1;
+				break;
+			default:
+				System.out.println("Difficulty has been changed to IMPOSSIBLE");
+				difficulty = 1;
+				break;
+		}
 	}
 	
 	@SuppressWarnings("resource")
@@ -103,7 +130,7 @@ public class TextAdventure{
 				System.out.println("You doged the attack! I admire your reflexes!");
 			} else {
 			
-				int pow = enemy.attack();
+				int pow = (int) Math.round(enemy.attack() * difficulty);
 				if(strength - pow <= 0){
 					//DIED
 					System.out.println("You died!");
@@ -224,7 +251,7 @@ public class TextAdventure{
 				System.out.println("You doged the attack!");
 				return false;
 			}
-			int pow = -(int) (((strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength))) * 0.4) - enemy.attack() * 0.6);
+			int pow = -(int) Math.round((((strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength))) * 0.4) - enemy.attack() * 0.6) * difficulty);
 			if(strength - pow <= 0){
 				//DIED
 				System.out.println("You died!");

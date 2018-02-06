@@ -59,10 +59,9 @@ public class TextAdventureRunner
 	    	}
     	}
     	
-//    	for(int i = 0; i < 9999; i++) {
-//    		System.out.println(i + ": " + (char)i);
-//    	}
-        
+    	System.out.println("Please select a difficulty from EASY, MEDIUM, HARD, IMPOSSIBLE");
+    	text.setDifficulty(inp.nextLine().trim());
+    	
         while(true){
         	if(redraw) {
             	if(text.draw()) {
