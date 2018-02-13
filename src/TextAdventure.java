@@ -251,7 +251,7 @@ public class TextAdventure{
 				System.out.println("You doged the attack!");
 				return false;
 			}
-			int pow = -(int) Math.round((((strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength))) * 0.4) - enemy.attack() * 0.6) * difficulty);
+			int pow = Math.abs(-(int) Math.round((((strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength))) * 0.4) - enemy.attack() * 0.6) * difficulty));
 			if(strength - pow <= 0){
 				//DIED
 				System.out.println("You died!");
@@ -291,7 +291,7 @@ public class TextAdventure{
 			return false;
 		} else {
 			System.out.println("You couldn't flee!");
-			int pow = -(int) (strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength)));
+			int pow = Math.abs(-(int) (strength + 0.1 * (enemy.attack() * ((strength / maxStr)- strength)) * difficulty));
 			if(strength - pow <= 0){
 				//DIED
 				System.out.println("You died!");
