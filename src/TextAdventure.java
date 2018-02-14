@@ -28,7 +28,10 @@ public class TextAdventure{
 	private boolean block;
 	private double difficulty;
 	
+	private boolean done;
+	
 	public TextAdventure(){
+		done = false;
 		block = false;
 		difficulty = 1;
 		attacking = false;
@@ -75,58 +78,55 @@ public class TextAdventure{
 	
 	@SuppressWarnings("resource")
 	public boolean draw(){
-		if(current.pos()[0] == sx - 1 && current.pos()[1] == sy -1) {
+		if(current.pos()[0] == sx - 1 && current.pos()[1] == sy -1 && !done) {
 			Scanner inp = new Scanner(System.in);
-			while(true){
-				System.out.println("There is a Sphynx guarding the exit of the maze.\n\"Who makes it, has no need of it.\nWho buys it, has no use for it. \nWho uses it can neither see nor feel it. \nWhat is it?\"");
-				if(inp.nextLine().toUpperCase().indexOf("COFFIN") >= 0){
-					System.out.println("\"Correct! How did you guess that?\nI bet you cheated!\nThat is why you will feel my wrath!\"");
-					current.spawnEnemy("Sphynx");
-					break;
-				} else {
-					System.out.println("That is not correct!");
+			if(current.getEnemy() == null){
+				while(true){
+					System.out.println("There is a Sphynx guarding the exit of the maze.\n\"Who makes it, has no need of it.\nWho buys it, has no use for it. \nWho uses it can neither see nor feel it. \nWhat is it?\"");
+					if(inp.nextLine().toUpperCase().indexOf("COFFIN") >= 0){
+						System.out.println("\"Correct! How did you guess that?\nI bet you cheated!\nThat is why you will feel my wrath!\"");
+						current.spawnEnemy("Sphynx");
+						done = true;
+						draw();
+						return false;
+					} else {
+						System.out.println("That is not correct!");
+					}
 				}
 			}
+		} else if(done && current.getEnemy() == null){
 			System.out.println("Congratulations traveler! You made it to the end in only " + time + " hours");
-			if(current.getEnemy() != null){
-				return false;
-			} else {
-				inp.close();
-				return true;
-			}
+			return true;
 		}
 		
 		if(strength > maxStr){
 			strength = maxStr;
 		}
-	
-		
+
 		String out = "";
-		if(Math.random() < 0.2){
-			out += "We are ";
-		} else if(Math.random() < 0.5){
-			out += "I think we are ";
-		} else {
-			out += "It looks like we are ";
-		}
-		if(current.equals(last)){
-			out += "still ";
-		}
-		out += "in a " + current.getType();
-		System.out.println(out);
-		out = "";
-//		switch(current.getType()) {
-//			case "Cave":
-//				out += "You can see the water drip from the walls.";
-//		}
 		
+		if(!done){
+			if(Math.random() < 0.2){
+				out += "We are ";
+			} else if(Math.random() < 0.5){
+				out += "I think we are ";
+			} else {
+				out += "It looks like we are ";
+			}
+			if(current.equals(last)){
+				out += "still ";
+			}
+			out += "in a " + current.getType();
+			System.out.println(out);
+		}
+		out = "";
 		if(current.getEnemy() != null){
 			attacking = true;
 			enemy = current.getEnemy();
 			enemy.draw();
 			if(strength < 10){
 				System.out.println("You doged the attack, but you are not very strong!\nWe should flee!");
-			} else if( Math.random() < 0.4) {
+			} else if( Math.random() < 0.2) {
 				System.out.println("You doged the attack! I admire your reflexes!");
 			} else {
 			
@@ -247,7 +247,7 @@ public class TextAdventure{
 				draw();
 				return false;
 			}
-			if(Math.random() < 0.1){
+			if(Math.random() < 0.03){
 				System.out.println("You doged the attack!");
 				return false;
 			}

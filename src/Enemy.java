@@ -118,4 +118,12 @@ class Sphynx extends Enemy{
 		super("Sphynx");
 		setStats(15, 1, 50);
 	}
+	
+	@Override
+	public void draw() {
+		int[] tmp = getStats();
+		System.out.println("Its attack power is " + tmp[0] + ".");
+		System.out.println("Its defense is " + tmp[1] + ".");
+		System.out.println("Its health is " + tmp[2] + ".");
+	}
 }
